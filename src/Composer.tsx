@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import {
   Platform,
   StyleSheet,
@@ -65,9 +65,11 @@ export function Composer({
   textInputAutoFocus = false,
   textInputProps = {},
   textInputStyle,
+  passDeltaH
 }: ComposerProps): React.ReactElement {
   const layoutRef = useRef<{ width: number; height: number }>()
-
+  const [tiheight, setTiheight] = useState(composerHeight)
+  const [deltaHeight, setDeltaHeight] = useState(0)
   const handleOnLayout = useCallbackOne(
     ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
       // Support earlier versions of React Native on Android.
@@ -87,6 +89,32 @@ export function Composer({
     },
     [onInputSizeChanged],
   )
+  const updateSize = (h) => {
+      let deltaH;
+      if (h < composerHeight)
+      {
+        deltaH = 0;
+        h = composerHeight;
+      }
+      else
+      {
+        deltaH = h-composerHeight;
+      }
+
+
+      if (h > 130)
+      {
+         deltaH = 130-composerHeight;
+      }
+
+      if (deltaH < 30 || deltaHeight !== deltaH)
+      {
+        passDeltaH(deltaH);
+      }
+
+      setDeltaHeight(deltaH);
+      setTiheight(h);
+    }
 
   return (
     <TextInput
@@ -99,11 +127,13 @@ export function Composer({
       editable={!disableComposer}
       onLayout={handleOnLayout}
       onChangeText={onTextChanged}
+      onContentSizeChange={(e) => updateSize(e.nativeEvent.contentSize.height)}
       style={[
         styles.textInput,
         textInputStyle,
         {
-          height: composerHeight,
+          height: tiheight,
+          maxHeight: 130,
           ...Platform.select({
             web: {
               outlineWidth: 0,
