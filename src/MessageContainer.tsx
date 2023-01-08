@@ -28,6 +28,7 @@ import { warning } from './logging'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#ebe5db',
   },
   containerAlignTop: {
     flexDirection: 'row',
