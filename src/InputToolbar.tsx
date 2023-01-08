@@ -7,6 +7,7 @@ import { Send, SendProps } from './Send'
 import { Actions, ActionsProps } from './Actions'
 import Color from './Color'
 import { StylePropType } from './utils'
+import I18n from '../../../components/locales/i18n'
 import { IMessage } from './Models'
 
 const styles = StyleSheet.create({
@@ -73,12 +74,22 @@ export function InputToolbar<TMessage extends IMessage = IMessage>(
 
   return (
     <View style={[styles.container, { position }, containerStyle] as ViewStyle}>
-      <View style={[styles.primary, props.primaryStyle]}>
+      {props.caseStatus === "Closed" &&
+       <View>
+         <View style={{width: 260, height: 44, alignSelf: 'center', justifyContent: 'center'}}>
+            {I18n.locale === 'fr' && <Text style={{textAlign: 'center', fontSize: 13, color: '#555'}}>{`Vous pouvez réouvrir votre demande d'assistance jusqu'à 14 jours après la résolution de votre problème.`}</Text>}
+            {I18n.locale === 'en' && <Text style={{textAlign: 'center', fontSize: 13, color: '#555'}}>{'You can reopen your support case up to 14 days from when your issue was resolved.'}</Text>}
+         </View>
+       </View>
+      }
+      {props.caseStatus !== "Closed" &&
+       <View style={[styles.primary, props.primaryStyle]}>
         {renderActions?.(rest) ||
           (onPressActionButton && <Actions {...rest} />)}
         {renderComposer?.(props as ComposerProps) || <Composer {...props} passDeltaH={passDeltaH}/>}
         {renderSend?.(props) || <Send {...props} />}
-      </View>
+       </View>
+      }
       {renderAccessory && (
         <View style={[styles.accessory, props.accessoryStyle]}>
           {renderAccessory(props)}
