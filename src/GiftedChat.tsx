@@ -416,6 +416,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     isInitialized: false, // initialization will calculate maxHeight before rendering the chat
     composerHeight: this.props.minComposerHeight,
     messagesContainerHeight: undefined,
+    deltaH: 0,
     typingDisabled: false,
     text: undefined,
     messages: undefined,
@@ -638,7 +639,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
       this.setBottomOffset(this.safeAreaSupport(this.props.bottomOffset))
       const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard()
       this.setState({
-        messagesContainerHeight: newMessagesContainerHeight,
+        messagesContainerHeight: this.state.deltaH > 0 ? (newMessagesContainerHeight-this.state.deltaH-15):newMessagesContainerHeight,
       })
     }
   }
@@ -652,7 +653,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
       this.setBottomOffset(0)
       const newMessagesContainerHeight = this.getBasicMessagesContainerHeight()
       this.setState({
-        messagesContainerHeight: newMessagesContainerHeight,
+        messagesContainerHeight: this.state.deltaH > 0 ? (newMessagesContainerHeight-this.state.deltaH-15):newMessagesContainerHeight,
       })
     }
   }
@@ -776,7 +777,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     )
     this.setState({
       composerHeight: newComposerHeight,
-      messagesContainerHeight: newMessagesContainerHeight,
+      messagesContainerHeight: this.state.deltaH > 0 ? (newMessagesContainerHeight-this.state.deltaH-15):newMessagesContainerHeight,
     })
   }
 
@@ -859,7 +860,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     if (this.props.renderInputToolbar) {
       return this.props.renderInputToolbar(inputToolbarProps)
     }
-    return <InputToolbar {...inputToolbarProps} />
+    return <InputToolbar {...inputToolbarProps} passDeltaH={this.passDeltaH}/>
   }
 
   renderChatFooter() {
@@ -874,6 +875,29 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
       return this.props.renderLoading()
     }
     return null
+  }
+          
+  passDeltaH = (dh) => {
+
+        const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard(this.state.composerHeight);
+
+        let mH;
+
+        if (dh < 15)
+        {
+          mH = newMessagesContainerHeight;
+        }
+        else
+        {
+          mH = (newMessagesContainerHeight-dh);
+        }
+
+        this.setState({
+            deltaH: dh,
+            messagesContainerHeight: mH,
+        });
+
+
   }
 
   render() {
