@@ -14,18 +14,23 @@ import { StylePropType } from './utils'
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    marginTop: 5,
-    marginBottom: 10,
-  },
-  text: {
-    backgroundColor: Color.backgroundTransparent,
-    color: Color.defaultColor,
-    fontSize: 12,
-    fontWeight: '300',
-  },
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        marginTop: 5,
+        marginBottom: 10,
+        backgroundColor: '#fff',
+        borderRadius: 20,
+        borderColor: '#ccc',
+        borderWidth: 0.5,
+        padding: 10,
+        width: 'auto',
+    },
+    text: {
+        color: '#111',
+        fontSize: 13,
+        fontWeight: '300',
+    },
 })
 
 export interface SystemMessageProps<TMessage extends IMessage> {
