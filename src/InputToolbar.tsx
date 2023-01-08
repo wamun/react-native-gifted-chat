@@ -44,6 +44,9 @@ export function InputToolbar<TMessage extends IMessage = IMessage>(
   props: InputToolbarProps<TMessage>,
 ) {
   const [position, setPosition] = useState('absolute')
+  const passDeltaH = (dh) => {
+      props.passDeltaH(dh)
+   }
   useEffect(() => {
     const keyboardWillShowListener = Keyboard.addListener(
       'keyboardWillShow',
@@ -73,7 +76,7 @@ export function InputToolbar<TMessage extends IMessage = IMessage>(
       <View style={[styles.primary, props.primaryStyle]}>
         {renderActions?.(rest) ||
           (onPressActionButton && <Actions {...rest} />)}
-        {renderComposer?.(props as ComposerProps) || <Composer {...props} />}
+        {renderComposer?.(props as ComposerProps) || <Composer {...props} passDeltaH={passDeltaH}/>}
         {renderSend?.(props) || <Send {...props} />}
       </View>
       {renderAccessory && (
