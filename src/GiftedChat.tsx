@@ -70,6 +70,7 @@ export interface GiftedChatProps<TMessage extends IMessage = IMessage> {
   messagesContainerStyle?: StyleProp<ViewStyle>
   /* Input text; default is undefined, but if specified, it will override GiftedChat's internal state */
   text?: string
+  caseStatus?: string,
   /* Controls whether or not the message bubbles appear at the top of the chat */
   alignTop?: boolean
   /* Determine whether is wrapped in a SafeAreaView */
@@ -243,6 +244,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     messages: [],
     messagesContainerStyle: undefined,
     text: undefined,
+    caseStatus: undefined,
     placeholder: DEFAULT_PLACEHOLDER,
     disableComposer: false,
     messageIdGenerator: () => uuid.v4(),
@@ -313,6 +315,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     messages: PropTypes.arrayOf(PropTypes.object),
     messagesContainerStyle: utils.StylePropType,
     text: PropTypes.string,
+    caseStatus: PropTypes.string,
     initialText: PropTypes.string,
     placeholder: PropTypes.string,
     disableComposer: PropTypes.bool,
